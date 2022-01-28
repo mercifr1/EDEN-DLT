@@ -8,12 +8,14 @@
 #' =======================
 #' 
 #' Import data and create scenarios
+#' for DLT as Y/N
+#' 
 #' =======================
 
 
 df0<-read.csv("./data/DLTYNexample.csv", sep=";")
 
-#' Default:
+#' Default DLT as Y/N:
 #' ----------------------
 #' Introduce dosing regimen 
 #' (see Schoeffski et al. 2004 - section "Study treatment")
@@ -27,7 +29,7 @@ ggplot(df0, aes(SUBJID, DOSE))+
   geom_point(aes(colour=as.factor(DLTYN)))
 
 
-#' Dose omission scenario 1:
+#' Dose omission:
 #' ----------------------
 #' Altering the default dataset, assuming
 #' - pat 26, 27, 28 and 32, have omitted his/her dose 
@@ -64,6 +66,22 @@ ggplot(derr1, aes(SUBJID, DOSE))+
   geom_point(aes(y=ERRDOSE, colour=as.factor(DLTYN)))+
   theme_minimal()
 
+
+#' =======================
+#' 
+#' Import data and create scenarios
+#' for DLT as time-to
+#' 
+#' =======================
+
+td0<-read.csv("./data/DLTTIMexample.csv", sep=",")
+
+ggplot(td0, aes(START, DOSE))+
+  geom_segment(aes(xend=END, yend=DOSE, colour=as.factor(DLTYN)))+
+  geom_point(aes(colour=as.factor(DLTYN)))+
+  geom_hline(aes(yintercept=70), lty=2)+
+  scale_y_continuous("Dose (mg)", breaks=20*0:5, limits=c(0, 100))+
+  theme_minimal()
 
 
 
