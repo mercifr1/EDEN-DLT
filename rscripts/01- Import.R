@@ -25,8 +25,21 @@ df0<-read.csv("./data/DLTYNexample.csv", sep=";")
 des<-expand.grid(DAY=c(1, 4), WEEK=1:3, SUBJID=df0$SUBJID)
 df1<-left_join(df0, des, by="SUBJID")
 
-ggplot(df0, aes(SUBJID, DOSE))+
-  geom_point(aes(colour=as.factor(DLTYN)))
+unique(df0$DOSE)
+
+mycols<-c("lightblue3", "orange2")
+g001<-ggplot(df0, aes(SUBJID, DOSE))+
+  geom_point(pch=21, colour="grey80", alpha=0.8, size=2,
+             stroke=1, aes(fill=as.factor(DLTYN)))+
+  scale_fill_manual(values=mycols, guide=F)+
+  scale_x_continuous("Subject ID", breaks=1:37)+
+  scale_y_continuous("Dose level (ug/kg)",
+                     breaks=c(0.01, 0.8, 3.2, 4, 4.8, 5.6, 6.4))+
+  theme_ipsum()+
+  theme(legend.position="none",
+        panel.grid.minor=element_blank())
+ggsave("./outputs/Fig01-Dose esc overview.jpg", 
+       width=24, height=10, unit="cm", dpi=300)
 
 
 #' Dose omission:

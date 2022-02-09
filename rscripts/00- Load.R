@@ -11,7 +11,8 @@
 #' =======================
 
 library(tidyverse)
+library(hrbrthemes)
 library(bcrm)
 #' library(crmPack)
 
-?bcrm
+
