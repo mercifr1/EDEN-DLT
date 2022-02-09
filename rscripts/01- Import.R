@@ -25,22 +25,26 @@ df0<-read.csv("./data/DLTYNexample.csv", sep=";")
 des<-expand.grid(DAY=c(1, 4), WEEK=1:3, SUBJID=df0$SUBJID)
 df1<-left_join(df0, des, by="SUBJID")
 
-unique(df0$DOSE)
+#' unique(df0$DOSE)
 
-mycols<-c("lightblue3", "orange2")
+myfills<-c("lightblue1", "orange1")
+mycols<-c("grey80", "black")
 g001<-ggplot(df0, aes(SUBJID, DOSE))+
-  geom_point(pch=21, colour="grey80", alpha=0.8, size=2,
-             stroke=1, aes(fill=as.factor(DLTYN)))+
-  scale_fill_manual(values=mycols, guide=F)+
+  geom_line(colour="grey80", alpha=0.8)+
+  geom_point(pch=21, alpha=0.8, size=1.2, stroke=0.8, 
+             aes(fill=as.factor(DLTYN),
+                 color=as.factor(DLTYN)))+
+  scale_fill_manual(values=myfills, guide=F)+
+  scale_color_manual(values=mycols, guide=F)+
   scale_x_continuous("Subject ID", breaks=1:37)+
   scale_y_continuous("Dose level (ug/kg)",
-                     breaks=c(0.01, 0.8, 3.2, 4, 4.8, 5.6, 6.4))+
+                     breaks=c(0.01, 0.8, 3.2, 4, 4.8, 5.6, 6.4, 12.8),
+                     limits=c(0.01, 12.8))+
+  labs(subtitle="a) Original data")+
   theme_ipsum()+
   theme(legend.position="none",
         panel.grid.minor=element_blank())
-ggsave("./outputs/Fig01-Dose esc overview.jpg", 
-       width=24, height=10, unit="cm", dpi=300)
-
+g001
 
 #' Dose omission:
 #' ----------------------
@@ -60,10 +64,26 @@ domi1<-domi0 %>%
   ungroup() %>%
   left_join(., df0, by="SUBJID")
 
-ggplot(domi1, aes(SUBJID, DOSE))+
-  geom_line()+
-  geom_point(aes(y=OMIDOSE, colour=as.factor(DLTYN)))+
-  theme_minimal()
+g002<-ggplot(domi1, aes(SUBJID, DOSE))+
+  geom_line(colour="grey80", alpha=0.8)+
+  geom_point(pch=21, alpha=0.8, size=1.2, stroke=0.8, 
+             aes(y=OMIDOSE, 
+                 fill=as.factor(DLTYN),
+                 color=as.factor(DLTYN)))+
+  geom_point(data=domi1 %>% filter(SUBJID %in% c(26, 27, 28, 32)), 
+             pch=21, alpha=0.8, size=4, stroke=1, fill=NA, color="grey20",
+             aes(y=OMIDOSE))+
+  scale_fill_manual(values=myfills, guide=F)+
+  scale_color_manual(values=mycols, guide=F)+
+  scale_x_continuous("Subject ID", breaks=1:37)+
+  scale_y_continuous("Average dose level (ug/kg)",
+                     breaks=c(0.01, 0.8, 3.2, 4, 4.8, 5.6, 6.4, 12.8),
+                     limits=c(0.01, 12.8))+
+  labs(subtitle="b) Dose omission scenario")+
+  theme_ipsum()+
+  theme(legend.position="none",
+        panel.grid.minor=element_blank())
+g002
 
 #' Dosing error scenario:
 #' ----------------------
@@ -78,6 +98,34 @@ ggplot(derr1, aes(SUBJID, DOSE))+
   geom_line()+
   geom_point(aes(y=ERRDOSE, colour=as.factor(DLTYN)))+
   theme_minimal()
+
+g003<-ggplot(derr1, aes(SUBJID, DOSE))+
+  geom_line(colour="grey80", alpha=0.8)+
+  geom_point(pch=21, alpha=0.8, size=1.2, stroke=0.8, 
+             aes(y=ERRDOSE, 
+                 fill=as.factor(DLTYN),
+                 color=as.factor(DLTYN)))+
+  geom_point(data=derr1 %>% filter(SUBJID %in% c(34, 35)), 
+             pch=21, alpha=0.8, size=4, stroke=1, fill=NA, color="grey20",
+             aes(y=ERRDOSE))+
+  scale_fill_manual(values=myfills, guide=F)+
+  scale_color_manual(values=mycols, guide=F)+
+  scale_x_continuous("Subject ID", breaks=1:37)+
+  scale_y_continuous("Dose level (ug/kg)",
+                     breaks=c(0.01, 0.8, 3.2, 4, 4.8, 5.6, 6.4, 12.8),
+                     limits=c(0.01, 12.8))+
+  labs(subtitle="c) Dosing error scenario")+
+  theme_ipsum()+
+  theme(legend.position="none",
+        panel.grid.minor=element_blank())
+g003
+
+gtog<-g001/g002/g003
+
+ggsave("./outputs/Fig01-Dose esc overview.jpg", gtog,
+       width=24, height=30, unit="cm", dpi=300)
+
+
 
 
 #' =======================

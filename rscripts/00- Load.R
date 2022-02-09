@@ -12,6 +12,7 @@
 
 library(tidyverse)
 library(hrbrthemes)
+library(patchwork)
 library(bcrm)
 #' library(crmPack)
 
