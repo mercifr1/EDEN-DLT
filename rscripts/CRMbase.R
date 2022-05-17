@@ -71,7 +71,7 @@ g1<-ggplot(mygdf, aes(x=as.factor(SUBJID), y=as.factor(DOSE)))+
   facet_wrap(~DES)+
   theme(panel.grid.major.x = element_blank())
 g1
-ggsave("Figure 2.png", g1, width=12, height=8, unit="cm", dpi=300)
+ggsave("outputs/Figure 2.png", g1, width=12, height=8, unit="cm", dpi=300)
 
 
 #' Specify max allowable dose given current data
