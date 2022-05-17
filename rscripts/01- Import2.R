@@ -46,10 +46,10 @@ g001<-ggplot(df0, aes(SUBJID, DOSE))+
 g001
 
 
-#' Dosing error scenario:
+#' Dosing error scenario / actual dose:
 #' ----------------------
 #' Altering the default dataset, assuming
-#' - pat 34 and 35, has actually received a double dose 
+#' - pat 12 and 13, has actually received a dose=2 units 
 #' ----------------------
 derr1<-df0 %>%
   mutate(ERRDOSE=ifelse(SUBJID %in% c(12, 13), 2, DOSE))
@@ -60,22 +60,46 @@ g002<-ggplot(derr1, aes(SUBJID, DOSE))+
              aes(y=ERRDOSE, 
                  fill=as.factor(DLTYN),
                  color=as.factor(DLTYN)))+
-  geom_point(data=derr1 %>% filter(SUBJID %in% c(34, 35)), 
-             pch=21, alpha=0.8, size=3, stroke=1, fill=NA, color="grey20",
-             aes(y=ERRDOSE))+
   scale_fill_manual(values=myfills, guide=F)+
   scale_color_manual(values=mycols, guide=F)+
   scale_x_continuous("Subject ID", breaks=1:37)+
   scale_y_continuous("Dose level (mg)",
                      breaks=c(1, 2.5, 3.25, 4.75, 6),
                      limits=c(1, 6))+
-  labs(subtitle="c) Dosing error scenario")+
+  labs(subtitle="b) Dosing error / actual dose")+
   theme_ipsum()+
   theme(legend.position="none",
         panel.grid.minor=element_blank())
 g002
 
-gtog<-g001/g002
+#' Dosing error scenario / composite :
+#' ----------------------
+#' Altering the default dataset, assuming
+#' - pat 12 and 13, has actually received a dose=2 units 
+#' ----------------------
+derr2<-df0 %>%
+  mutate(ERRDOSE=ifelse(SUBJID %in% c(12, 13), 2, DOSE),
+         DLTYN2=ifelse(SUBJID %in% c(12, 13), 1, DLTYN))
+
+g003<-ggplot(derr2, aes(SUBJID, DOSE))+
+  geom_line(colour="grey80", alpha=0.8)+
+  geom_point(pch=21, alpha=0.8, size=3, stroke=0.8, 
+             aes(y=ERRDOSE, 
+                 fill=as.factor(DLTYN2),
+                 color=as.factor(DLTYN2)))+
+  scale_fill_manual(values=myfills, guide=F)+
+  scale_color_manual(values=mycols, guide=F)+
+  scale_x_continuous("Subject ID", breaks=1:37)+
+  scale_y_continuous("Dose level (mg)",
+                     breaks=c(1, 2.5, 3.25, 4.75, 6),
+                     limits=c(1, 6))+
+  labs(subtitle="c) Dosing error / composite")+
+  theme_ipsum()+
+  theme(legend.position="none",
+        panel.grid.minor=element_blank())
+g003
+
+gtog<-g001/g002/g003
 
 ggsave("./outputs/Fig01-Dose esc overview.jpg", gtog,
        width=18, height=20, unit="cm", dpi=300)

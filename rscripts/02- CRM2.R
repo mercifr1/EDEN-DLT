@@ -22,8 +22,12 @@ mydata<-left_join(df0, dose.rank, by="DOSE") %>%
   select(patient, dose, tox)
 
 m001<-bcrm(data=mydata, stop=list(nmax=17), p.tox0=p.tox0, dose=dose.label,
-     ff="power", prior.alpha=c(1, 1, 1), target.tox=0.33)
+           ff="power", prior.alpha=c(1, 1, 1), target.tox=0.33)
+#' bcrm(stop=list(nmax=17), p.tox0=p.tox0, dose=dose.label,
+#'            ff="power", prior.alpha=c(1, 1, 1), target.tox=0.33, start=1)
 m001
+
+
 m001.est<-data.frame(t(m001$ndose[[1]]$quantiles)) %>%
   rename(PP25=X25., PP50=X50., PP75=X75.) %>%
   select(PP25, PP50, PP75) %>%
