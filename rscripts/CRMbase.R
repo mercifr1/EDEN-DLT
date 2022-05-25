@@ -42,7 +42,7 @@ set.seed(1710)
 
 #' Read data
 #' Create cohort number and define dose grid
-mydf<-read.csv("BLRMdata.csv", header=T, sep=";") %>%
+mydf<-read.csv("data/BLRMdata.csv", header=T, sep=";") %>%
   mutate(COH=dense_rank(DOSE)) %>%
   arrange(COH, SUBJID)
 mydf
@@ -97,7 +97,7 @@ print(doseRecommendation$plot)
 
 #' Read data
 #' Create cohort number and define dose grid
-mydf<-read.csv("BLRMdata.csv", header=T, sep=";") %>%
+mydf<-read.csv("data/BLRMdata.csv", header=T, sep=";") %>%
   mutate(COH=dense_rank(DOSE)) %>%
   filter(SUBJID!=10) %>%
   arrange(COH, SUBJID)
@@ -128,7 +128,7 @@ print(doseRecommendation$plot)
 
 #' Read data
 #' Create cohort number and define dose grid
-mydf<-read.csv("BLRMdata.csv", header=T, sep=";") %>%
+mydf<-read.csv("data/BLRMdata.csv", header=T, sep=";") %>%
   mutate(COH=dense_rank(DOSE)) %>%
   arrange(COH, SUBJID)
 data<-Data(x=mydf$DOSE, y=mydf$DLTH,
