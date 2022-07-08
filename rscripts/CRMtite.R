@@ -32,6 +32,7 @@ g01<-DF %>%
                         'Dose Level: 13 (5.6mg)', 'Dose Level: 14 (6.4mg)'))) %>% 
   ggplot() + 
   geom_segment(lwd=1, aes(x = START, xend = END, y = SUBJID, yend = SUBJID, col = DOSE)) + 
+  geom_segment(lwd=0.8, aes(y=12.5, yend=13.5, x=62.5, xend=62.5), col="black") + 
   geom_point(size=3, aes(x = END, y = SUBJID, shape = DLT, col = DOSE)) + 
   scale_shape_manual(values = c(1, 16), limits = c('No', 'Yes')) +
   scale_y_continuous("Participants", breaks=1:13)+
@@ -40,6 +41,7 @@ g01<-DF %>%
        x = 'Time (weeks)') + 
   scale_color_manual(values = rev(cols))+
   theme(panel.grid.minor = element_blank())
+g01
 ggsave("outputs/Figure 3.png", g01, width=18, height=12, unit="cm", dpi=300)
 
 # generate an IE in TNO 13 (as described in manuscript)
